@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>https/instagram.href.com</title>
+    <!-- Иконка для сайта -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/726/726496.png">
+
+    <style>
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background-color: #121212;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #karaoke-container {
+            width: 90%;
+            height: auto;
+            min-height: 300px;
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .lyrics-line {
+            font-size: 20px;
+            color: #121212; /* Начальный цвет фона */
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
+            line-height: 1.8;
+            padding: 0 20px;
+        }
+
+        .active-line {
+            font-size: 26px;
+            opacity: 1;
+            color: #ffffff; /* Цвет активной строки */
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.8); /* Светящийся эффект */
+            transform: scale(1.05);
+        }
+
+        /* Медиазапрос для iPhone 13 Pro (390px ширина) */
+        @media only screen and (max-width: 390px) {
+            .lyrics-line {
+                font-size: 18px; /* Уменьшаем шрифт для небольших экранов */
+                line-height: 1.6;
+            }
+
+            .active-line {
+                font-size: 22px; /* Уменьшаем размер активной строки для маленьких экранов */
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+    <div id="karaoke-container">
+        <div id="lyrics-wrapper"></div>
+    </div>
+
+    <script>
+        const lyrics = [
+            "Ещё одной тёмной ночью, каждый твой вдох",
+            "И каждый твой выдох кричит об одном",
+            "Ещё одним холодным утром — руки без слов",
+            "Кричат об одном: «Это любовь»",
+            "                             "
+        ];
+
+        const karaokeWrapper = document.getElementById("lyrics-wrapper");
+
+        // Инициализация строк
+        lyrics.forEach((line, index) => {
+            const lineElement = document.createElement("div");
+            lineElement.className = "lyrics-line";
+            lineElement.textContent = line;
+            karaokeWrapper.appendChild(lineElement);
+        });
+
+        const allLines = Array.from(document.getElementsByClassName("lyrics-line"));
+        let currentLineIndex = 0;
+
+        function updateLyrics() {
+            allLines.forEach((line, index) => {
+                // Прошедшие строки
+                if (index < currentLineIndex) {
+                    line.style.transform = `translateY(-150%)`;
+                    line.style.opacity = "0.5";
+                } 
+                // Текущая строка
+                else if (index === currentLineIndex) {
+                    line.style.transform = `translateY(0%)`;
+                    line.classList.add("active-line"); // Активная строка становится видимой
+                } 
+                // Будущие строки
+                else {
+                    line.style.transform = `translateY(150%)`;
+                    line.style.opacity = "0"; // Будущие строки невидимы
+                }
+            });
+        }
+
+        async function karaoke() {
+            for (let i = 0; i < lyrics.length; i++) {
+                currentLineIndex = i;
+                updateLyrics();
+                await new Promise((resolve) => setTimeout(resolve, 2000)); // Задержка между строками
+            }
+        }
+
+        // Запуск караоке
+        karaoke();
+    </script>
+</body>
+</html>
